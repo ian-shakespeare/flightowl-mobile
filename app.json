@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "flightowl-mobile",
+    "slug": "flightowl-mobile"
+  }
+}
