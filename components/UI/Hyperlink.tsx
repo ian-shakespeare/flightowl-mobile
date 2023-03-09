@@ -1,16 +1,16 @@
-import { StyledLink } from '../StyledElements'
+import { StyledLink } from "../StyledElements";
 
 type Props = {
-    href: string
-    text: string
-}
+  label: string;
+  href: string;
+};
 
-const Hyperlink = ({ href, text }: Props) => {
-    return (
-        <StyledLink href={href} className='text-fo-purple text-lg'>
-            {text}
-        </StyledLink>
-    )
-}
+const Hyperlink = ({ label, href }: Props) => {
+  return (
+    <StyledLink href={href} className="text-fo-purple text-lg">
+      {label}
+    </StyledLink>
+  );
+};
 
-export default Hyperlink
+export default Hyperlink;

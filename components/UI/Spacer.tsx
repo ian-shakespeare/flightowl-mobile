@@ -1,7 +1,5 @@
-import { StyledView } from '../StyledElements'
+import { StyledView } from "../StyledElements";
 
-const Spacer = () => (
-    <StyledView className='w-full h-full' />
-)
+const Spacer = () => <StyledView className="w-full h-1/3" />;
 
-export default Spacer
+export default Spacer;
