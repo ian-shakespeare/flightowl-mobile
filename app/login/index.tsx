@@ -1,19 +1,31 @@
+import axios from "axios";
 import { useState } from "react";
 import {
   StyledView,
   StyledTextInput,
   StyledText,
 } from "../../components/StyledElements";
-import Button from "../../components/UI/Button";
+import ButtonPrimary from "../../components/UI/ButtonPrimary";
 import Hyperlink from "../../components/UI/Hyperlink";
-import Spacer from "../../components/UI/Spacer";
 
-const Login = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const login = async () => {
+    if (email === "" || password === "") return;
+    console.log("hi");
+    const res = await axios
+      .post(process.env.API_URL + "/sessions", {
+        email: email,
+        password: password,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err.toJSON()));
+  };
+
   return (
-    <StyledView className="flex-1 gap-2 items-center justify-center">
+    <StyledView className="h-2/3 flex gap-2 items-center justify-center">
       <StyledText className="w-3/4 text-lg">Email</StyledText>
       <StyledTextInput
         inputMode="email"
@@ -30,11 +42,10 @@ const Login = () => {
       />
       <StyledView className="w-3/4 flex flex-row justify-between items-center">
         <Hyperlink href="/register" label="Create an Account" />
-        <Button label="Login" onPress={() => console.log(email, password)} />
+        <ButtonPrimary label="Login" onPress={login} />
       </StyledView>
-      <Spacer />
     </StyledView>
   );
 };
 
-export default Login;
+export default LoginPage;
