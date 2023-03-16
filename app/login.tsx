@@ -4,9 +4,9 @@ import {
   StyledView,
   StyledTextInput,
   StyledText,
-} from "../../components/StyledElements";
-import ButtonPrimary from "../../components/UI/ButtonPrimary";
-import Hyperlink from "../../components/UI/Hyperlink";
+} from "../components/StyledElements";
+import ButtonPrimary from "../components/UI/ButtonPrimary";
+import Hyperlink from "../components/UI/Hyperlink";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
