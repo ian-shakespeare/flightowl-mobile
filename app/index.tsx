@@ -14,6 +14,7 @@ import airports from "../data/airports.json";
 import { View } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { Link } from "expo-router";
+import Hyperlink from "../components/UI/Hyperlink";
 
 type SearchParameter = "origin" | "destination" | "date";
 type Airport = {
@@ -133,7 +134,7 @@ const Home = () => {
                             }
                         />
                     )}
-                    <Link href="/search">Search</Link>
+                    <Hyperlink label="example search" href="/search" />
                 </StyledView>
             )}
         </>

@@ -1,14 +1,9 @@
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowRight, faStar } from "@fortawesome/free-solid-svg-icons";
-import {
-    StyledScrollView,
-    StyledText,
-    StyledView,
-} from "../components/StyledElements";
-import carriers from "../data/carriers.json";
+import { StyledScrollView } from "../components/StyledElements";
+import SearchResult from "../components/SearchResult";
+import { FlightOffer } from "../interfaces";
 
 const SearchPage = () => {
-    const results = [
+    const results: FlightOffer[] = [
         {
             type: "flight-offer",
             id: "1",
@@ -8372,75 +8367,10 @@ const SearchPage = () => {
         },
     ];
 
-    const getCarrierName = (code: string): string => {
-        const name = (carriers as Record<string, string>)[code];
-        return name ?? "Unregistered Airline";
-    };
-
-    const toTime = (t: string): string =>
-        new Date(t).toLocaleString("en-US", {
-            hour: "numeric",
-            minute: "numeric",
-            hour12: true,
-        });
-
-    const toDuration = (d: string): string =>
-        d.slice(2).replace("H", " hr ").replace("M", "min");
-
     return (
         <StyledScrollView>
             {results.slice(0, 5).map((f, i) => (
-                <StyledView
-                    key={i}
-                    className="w-3/4 mx-auto py-6 border-b-2 border-gray-200"
-                >
-                    <StyledView className="flex justify-between flex-row w-full">
-                        <StyledText className="text-6xl">
-                            {f.itineraries[0].segments[0].departure.iataCode}
-                        </StyledText>
-                        <FontAwesomeIcon
-                            icon={faArrowRight}
-                            size={40}
-                            color="#7F58E8"
-                        />
-                        <StyledText className="text-6xl">
-                            {f.itineraries[0].segments.at(-1)?.arrival.iataCode}
-                        </StyledText>
-                    </StyledView>
-                    <StyledText className="text-4xl text-gray-300">
-                        {getCarrierName(f.validatingAirlineCodes[0])}
-                    </StyledText>
-                    <StyledText className="text-3xl mt-4">
-                        {toTime(f.itineraries[0].segments[0].departure.at)} -{" "}
-                        {toTime(
-                            String(f.itineraries[0].segments.at(-1)?.arrival.at)
-                        )}
-                    </StyledText>
-                    <StyledView className="flex flex-row gap-1">
-                        <StyledText className="text-2xl text-gray-300">
-                            {toDuration(f.itineraries[0].duration)}
-                        </StyledText>
-                        <StyledText className="text-2xl text-gray-300">
-                            (
-                            {f.itineraries[0].segments.length == 1
-                                ? String(f.itineraries[0].segments.length) +
-                                  " stop"
-                                : String(f.itineraries[0].segments.length) +
-                                  " stops"}
-                            )
-                        </StyledText>
-                    </StyledView>
-                    <StyledView className="flex flex-row justify-between mt-4">
-                        <StyledText className="text-4xl">
-                            ${f.price.grandTotal}
-                        </StyledText>
-                        <FontAwesomeIcon
-                            icon={faStar}
-                            color="#7F58E8"
-                            size={32}
-                        />
-                    </StyledView>
-                </StyledView>
+                <SearchResult key={i} flight={f} />
             ))}
         </StyledScrollView>
     );
