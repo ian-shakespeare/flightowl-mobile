@@ -9,27 +9,47 @@ import {
     faMap,
     faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import { createContext, useState, Dispatch, SetStateAction } from "react";
-import { Account } from "../interfaces";
+import {
+    createContext,
+    useState,
+    Dispatch,
+    SetStateAction,
+    useEffect,
+} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const StyledSafeAreaView = styled(SafeAreaView);
 
 export const AuthContext = createContext({
-    account: null as Account | null,
-    setAccount: (() => {}) as Dispatch<SetStateAction<Account | null>>,
+    sessionId: null as string | null,
+    setSessionId: (() => {}) as Dispatch<SetStateAction<string | null>>,
 });
 
 const Layout = () => {
     const foPurple = "#7F58E8";
     const gray400 = "#9ca3af";
     const pathname = usePathname();
-    const [account, setAccount] = useState<Account | null>(null);
-    const auth = { account, setAccount };
+    const [sessionId, setSessionId] = useState<string | null>(null);
+    const auth = { sessionId, setSessionId };
+
+    const getStoredSession = async () => {
+        try {
+            const sid = await AsyncStorage.getItem("sessionId");
+            setSessionId(sid === "" ? null : sid);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        getStoredSession();
+    }, []);
+
     return (
         <AuthContext.Provider value={auth}>
             <StyledSafeAreaView className="flex h-full justify-between">
                 <Slot />
-                <StyledView className="flex flex-row w-full h-20 px-12 justify-between items-center bg-white border-t-2 border-gray-200">
+                <StyledView className="flex flex-row w-full h-20 px-12 justify-between items-center bg-gray-100 border-t-2 border-gray-200">
                     <Link href="/">
                         <FontAwesomeIcon
                             icon={faSearch}

@@ -1,5 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { useState, useContext } from "react";
+import { useRouter } from "expo-router";
+import { useState, useContext, useEffect } from "react";
 import {
     StyledView,
     StyledTextInput,
@@ -10,12 +12,16 @@ import Hyperlink from "../components/UI/Hyperlink";
 import { AuthContext } from "./_layout";
 
 const LoginPage = () => {
+    const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { account, setAccount } = useContext(AuthContext);
+    const { sessionId, setSessionId } = useContext(AuthContext);
 
     const login = async () => {
-        if (email === "" || password === "") return;
+        if (email === "" || password === "") {
+            alert("Please enter a valid email and password");
+            return;
+        }
         console.log("hi");
         await axios
             .post("https://api.flightowl.app/sessions", {
@@ -23,10 +29,25 @@ const LoginPage = () => {
                 password: password,
             })
             .then((res) => {
-                console.log(res.data);
+                if (res.status === 201) {
+                    const [sessionCookie] = res.headers["set-cookie"]!;
+                    const sid = sessionCookie.split("; ")[0].split("=")[1];
+                    setSessionId(sid);
+                    AsyncStorage.setItem("sessionId", sid);
+                    router.push("/");
+                }
             })
-            .catch((err) => console.error(err.toJSON()));
+            .catch((err) => {
+                console.error(err.toJSON());
+                alert("There was a problem logging in, please try again.");
+            });
     };
+
+    useEffect(() => {
+        if (sessionId) {
+            router.push("/account");
+        }
+    }, []);
 
     return (
         <StyledView className="h-2/3 flex gap-2 items-center justify-center">
