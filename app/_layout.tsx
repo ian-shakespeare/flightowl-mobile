@@ -63,13 +63,6 @@ const Layout = () => {
                     </Link>
                     <Link href="/">
                         <FontAwesomeIcon
-                            icon={faMap}
-                            size={32}
-                            color={pathname === "/map" ? foPurple : gray400}
-                        />
-                    </Link>
-                    <Link href="/">
-                        <FontAwesomeIcon
                             icon={faBookmark}
                             size={32}
                             color={pathname === "/saved" ? foPurple : gray400}

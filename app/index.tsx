@@ -13,8 +13,9 @@ import Fuse from "fuse.js";
 import airports from "../data/airports.json";
 import { View } from "react-native";
 import IconButton from "../components/UI/IconButton";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import Hyperlink from "../components/UI/Hyperlink";
+import moment from "moment";
 
 type SearchParameter = "origin" | "destination" | "date";
 type Airport = {
@@ -26,6 +27,7 @@ type Airport = {
 };
 
 const Home = () => {
+    const router = useRouter();
     const [focusedInput, setFocusedInput] = useState<SearchParameter | null>(
         null
     );
@@ -122,19 +124,27 @@ const Home = () => {
                         )}
                     </StyledView>
                     <StyledTextInput
+                        value={date}
                         onChangeText={setDate}
                         placeholder="Date mm/dd/yyyy"
                         className="w-3/4 px-4 py-2 border-2 border-gray-200 rounded-md text-lg"
                     />
-                    {origin !== "" && destination !== "" && date !== "" && (
-                        <ButtonPrimary
-                            label="Show me flights"
-                            onPress={() =>
-                                console.log(origin, destination, date)
-                            }
-                        />
-                    )}
-                    <Hyperlink label="example search" href="/search" />
+                    {origin !== "" &&
+                        destination !== "" &&
+                        moment(date, "MM/DD/YYYY").format("YYYY-MM-DD") !==
+                            "" && (
+                            <ButtonPrimary
+                                label="Show me flights"
+                                onPress={() => {
+                                    router.push(
+                                        `search?origin=${origin}&destination=${destination}&date=${moment(
+                                            date,
+                                            "MM/DD/YYYY"
+                                        ).format("YYYY-MM-DD")}`
+                                    );
+                                }}
+                            />
+                        )}
                 </StyledView>
             )}
         </>

@@ -1,11 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { useRouter } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import { StyledText, StyledView } from "../components/StyledElements";
+import ButtonPrimary from "../components/UI/ButtonPrimary";
 import { Account } from "../interfaces";
 import { AuthContext } from "./_layout";
 
 const AccountPage = () => {
+    const router = useRouter();
     const { sessionId, setSessionId } = useContext(AuthContext);
     const [user, setUser] = useState<Account | null>(null);
 
@@ -26,7 +29,11 @@ const AccountPage = () => {
                     AsyncStorage.setItem("sessionId", "");
                 }
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                setSessionId(null);
+                AsyncStorage.setItem("sessionId", "");
+                console.error(err);
+            });
     }, []);
 
     return (
@@ -35,6 +42,14 @@ const AccountPage = () => {
                 Name: {user ? `${user.firstName} ${user.lastName}` : "Unknown"}
             </StyledText>
             <StyledText>Account page. Id: {sessionId}</StyledText>
+            <ButtonPrimary
+                label="Logout"
+                onPress={() => {
+                    setSessionId(null);
+                    AsyncStorage.setItem("sessionId", "");
+                    router.push("/login");
+                }}
+            />
         </StyledView>
     );
 };
