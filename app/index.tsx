@@ -2,7 +2,6 @@ import {
     StyledView,
     StyledText,
     StyledTextInput,
-    StyledScrollView,
     StyledPressable,
 } from "../components/StyledElements";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -10,12 +9,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ButtonPrimary from "../components/UI/ButtonPrimary";
 import ButtonSecondary from "../components/UI/ButtonSecondary";
 import { useState } from "react";
-import Fuse from "fuse.js";
-import airports from "../data/airports.json";
-import { View } from "react-native";
-import IconButton from "../components/UI/IconButton";
-import { Link, useRouter } from "expo-router";
-import Hyperlink from "../components/UI/Hyperlink";
+import { useRouter } from "expo-router";
 import moment from "moment";
 import AirportInput from "../components/AirportInput";
 
