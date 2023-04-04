@@ -15,7 +15,7 @@ const LoginPage = () => {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { sessionId, setSessionId } = useContext(AuthContext);
+    const { jwt, setJwt } = useContext(AuthContext);
 
     const login = async () => {
         if (email === "" || password === "") {
@@ -24,16 +24,21 @@ const LoginPage = () => {
         }
         console.log("hi");
         await axios
-            .post("https://api.flightowl.app/sessions", {
-                email: email,
-                password: password,
-            })
+            .post(
+                "https://api.flightowl.app/login",
+                {
+                    email: email,
+                    password: password,
+                },
+                {
+                    withCredentials: true,
+                }
+            )
             .then((res) => {
                 if (res.status === 201) {
-                    const [sessionCookie] = res.headers["set-cookie"]!;
-                    const sid = sessionCookie.split("; ")[0].split("=")[1];
-                    setSessionId(sid);
-                    AsyncStorage.setItem("sessionId", sid);
+                    const token = res.data.token;
+                    setJwt(token);
+                    AsyncStorage.setItem("jwt", token);
                     router.push("/");
                 }
             })
@@ -44,7 +49,7 @@ const LoginPage = () => {
     };
 
     useEffect(() => {
-        if (sessionId) {
+        if (jwt) {
             router.push("/account");
         }
     }, []);

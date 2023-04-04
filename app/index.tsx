@@ -3,6 +3,7 @@ import {
     StyledText,
     StyledTextInput,
     StyledScrollView,
+    StyledPressable,
 } from "../components/StyledElements";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -16,6 +17,7 @@ import IconButton from "../components/UI/IconButton";
 import { Link, useRouter } from "expo-router";
 import Hyperlink from "../components/UI/Hyperlink";
 import moment from "moment";
+import AirportInput from "../components/AirportInput";
 
 type SearchParameter = "origin" | "destination" | "date";
 type Airport = {
@@ -28,99 +30,67 @@ type Airport = {
 
 const Home = () => {
     const router = useRouter();
-    const [focusedInput, setFocusedInput] = useState<SearchParameter | null>(
-        null
-    );
-    const [searchValue, setSearchValue] = useState("");
     const [origin, setOrigin] = useState("");
     const [destination, setDestination] = useState("");
     const [date, setDate] = useState("");
-
-    const options = {
-        keys: ["name", "iata_code", "municipality"],
-    };
-    const fuse = new Fuse(airports, options);
-    const emptyAirport: Airport = {
-        item: { name: "", municipality: "", iata_code: "" },
-    };
-
-    const updateSearchParam = (param: SearchParameter, value: string) => {
-        switch (param) {
-            case "origin":
-                setOrigin(value);
-                break;
-            case "destination":
-                setDestination(value);
-                break;
-            case "date":
-                setDate(value);
-                break;
-        }
-    };
+    const [selectedInput, setSelectedInput] = useState<string | null>(null);
 
     return (
         <>
-            {focusedInput ? (
-                <StyledScrollView className="h-full">
-                    <StyledTextInput
-                        onChangeText={setSearchValue}
-                        className="py-3 border-y-2 border-gray-200 text-fo-magenta text-center text-lg"
-                        placeholder="Airport Name"
+            {selectedInput ? (
+                <StyledView>
+                    <AirportInput
+                        callback={(s: string) => {
+                            selectedInput === "origin"
+                                ? setOrigin(s)
+                                : setDestination(s);
+                            setSelectedInput(null);
+                        }}
                     />
-                    {fuse
-                        .search(searchValue)
-                        .slice(0, 15)
-                        .map((pa, i) => (
-                            <StyledView
-                                key={i}
-                                className="py-2 border-b-2 border-gray-200"
-                            >
-                                <ButtonSecondary
-                                    label={pa.item.name}
-                                    onPress={() => {
-                                        updateSearchParam(
-                                            focusedInput,
-                                            pa.item.iata_code
-                                        );
-                                        setFocusedInput(null);
-                                    }}
-                                />
-                            </StyledView>
-                        ))}
-                </StyledScrollView>
+                </StyledView>
             ) : (
                 <StyledView className="h-2/3 flex gap-4 items-center justify-center">
                     <StyledText className="text-fo-purple text-3xl">
                         Welcome back
                     </StyledText>
-                    <StyledView className="w-3/4 py-2 px-4 flex flex-row justify-between items-center border-2 border-gray-200 rounded-md">
-                        <ButtonSecondary
-                            label={origin || "Where from?"}
-                            onPress={() => setFocusedInput("origin")}
-                        />
-                        {origin !== "" && (
-                            <IconButton
-                                icon={faXmark}
-                                color="#e5e7eb"
-                                size={24}
-                                onPress={() => updateSearchParam("origin", "")}
+                    <StyledView className="flex flex-row items-center justify-between w-3/4 px-4 py-2 border-2 border-gray-200 rounded-md">
+                        {origin === "" ? (
+                            <ButtonSecondary
+                                label="Where from?"
+                                onPress={() => {
+                                    setSelectedInput("origin");
+                                }}
                             />
+                        ) : (
+                            <>
+                                <StyledText className="text-lg">
+                                    {origin}
+                                </StyledText>
+                                <StyledPressable onPress={() => setOrigin("")}>
+                                    <FontAwesomeIcon icon={faXmark} size={20} />
+                                </StyledPressable>
+                            </>
                         )}
                     </StyledView>
-                    <StyledView className="w-3/4 py-2 px-4 flex flex-row justify-between items-center border-2 border-gray-200 rounded-md">
-                        <ButtonSecondary
-                            label={destination || "Where to?"}
-                            onPress={() => setFocusedInput("destination")}
-                        />
-                        {destination !== "" && (
-                            <IconButton
-                                icon={faXmark}
-                                color="#e5e7eb"
-                                size={24}
-                                onPress={() =>
-                                    updateSearchParam("destination", "")
-                                }
+                    <StyledView className="flex flex-row items-center justify-between w-3/4 px-4 py-2 border-2 border-gray-200 rounded-md">
+                        {destination === "" ? (
+                            <ButtonSecondary
+                                label="Where to?"
+                                onPress={() => {
+                                    setSelectedInput("destination");
+                                }}
                             />
+                        ) : (
+                            <>
+                                <StyledText className="text-lg">
+                                    {destination}
+                                </StyledText>
+                                <StyledPressable
+                                    onPress={() => setDestination("")}
+                                >
+                                    <FontAwesomeIcon icon={faXmark} size={20} />
+                                </StyledPressable>
+                            </>
                         )}
                     </StyledView>
                     <StyledTextInput

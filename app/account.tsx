@@ -9,7 +9,7 @@ import { AuthContext } from "./_layout";
 
 const AccountPage = () => {
     const router = useRouter();
-    const { sessionId, setSessionId } = useContext(AuthContext);
+    const { jwt, setJwt } = useContext(AuthContext);
     const [user, setUser] = useState<Account | null>(null);
 
     useEffect(() => {
@@ -18,20 +18,20 @@ const AccountPage = () => {
                 method: "GET",
                 url: "https://api.flightowl.app/user",
                 headers: {
-                    Cookie: `sessionId=${sessionId}`,
+                    Authorization: `Bearer ${jwt}`,
                 },
             })
             .then((res) => {
                 if (res.status === 200) {
                     setUser(res.data);
                 } else if (res.status === 401) {
-                    setSessionId(null);
-                    AsyncStorage.setItem("sessionId", "");
+                    setJwt(null);
+                    AsyncStorage.setItem("jwt", "");
                 }
             })
             .catch((err) => {
-                setSessionId(null);
-                AsyncStorage.setItem("sessionId", "");
+                setJwt(null);
+                AsyncStorage.setItem("jwt", "");
                 console.error(err);
             });
     }, []);
@@ -41,11 +41,11 @@ const AccountPage = () => {
             <StyledText>
                 Name: {user ? `${user.firstName} ${user.lastName}` : "Unknown"}
             </StyledText>
-            <StyledText>Account page. Id: {sessionId}</StyledText>
+            <StyledText>Account page. Token: {jwt}</StyledText>
             <ButtonPrimary
                 label="Logout"
                 onPress={() => {
-                    setSessionId(null);
+                    setJwt(null);
                     AsyncStorage.setItem("sessionId", "");
                     router.push("/login");
                 }}

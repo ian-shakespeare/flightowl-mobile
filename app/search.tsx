@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SearchPage = () => {
     const { origin, destination, date } = useSearchParams();
-    const { sessionId, setSessionId } = useContext(AuthContext);
+    const { jwt, setJwt } = useContext(AuthContext);
     const [results, setResults] = useState<FlightOffer[] | null>(null);
 
     useEffect(() => {
@@ -19,11 +19,10 @@ const SearchPage = () => {
             departureDate: date,
             adults: 1,
         };
-        console.log(JSON.stringify(body));
         fetch("https://api.flightowl.app/flights", {
             method: "POST",
             headers: {
-                Cookie: `sessionId=${sessionId};`,
+                Authorization: `Bearer ${jwt};`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(body),

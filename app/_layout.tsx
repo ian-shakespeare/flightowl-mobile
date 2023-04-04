@@ -21,21 +21,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const StyledSafeAreaView = styled(SafeAreaView);
 
 export const AuthContext = createContext({
-    sessionId: null as string | null,
-    setSessionId: (() => {}) as Dispatch<SetStateAction<string | null>>,
+    jwt: null as string | null,
+    setJwt: (() => {}) as Dispatch<SetStateAction<string | null>>,
 });
 
 const Layout = () => {
     const foPurple = "#7F58E8";
     const gray400 = "#9ca3af";
     const pathname = usePathname();
-    const [sessionId, setSessionId] = useState<string | null>(null);
-    const auth = { sessionId, setSessionId };
+    const [jwt, setJwt] = useState<string | null>(null);
+    const auth = { jwt, setJwt };
 
     const getStoredSession = async () => {
         try {
-            const sid = await AsyncStorage.getItem("sessionId");
-            setSessionId(sid === "" ? null : sid);
+            const token = await AsyncStorage.getItem("jwt");
+            setJwt(token === "" ? null : token);
         } catch (err) {
             console.error(err);
         }

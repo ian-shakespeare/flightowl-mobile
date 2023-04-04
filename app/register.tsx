@@ -1,5 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { useState } from "react";
+import { useRouter } from "expo-router";
+import { useContext, useState } from "react";
 import {
     StyledView,
     StyledTextInput,
@@ -7,6 +9,7 @@ import {
 } from "../components/StyledElements";
 import ButtonPrimary from "../components/UI/ButtonPrimary";
 import Hyperlink from "../components/UI/Hyperlink";
+import { AuthContext } from "./_layout";
 
 const RegisterPage = () => {
     const [firstName, setFirstName] = useState("");
@@ -14,6 +17,8 @@ const RegisterPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
+    const { jwt, setJwt } = useContext(AuthContext);
+    const router = useRouter();
 
     const register = async () => {
         if (
@@ -25,14 +30,19 @@ const RegisterPage = () => {
             return;
         if (password !== passwordConfirm) return;
         await axios
-            .post(process.env.API_URL + "/sessions", {
+            .post(process.env.API_URL + "/register", {
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
                 password: password,
                 sex: "unselected",
             })
-            .then((res) => console.log(res))
+            .then((res) => {
+                const token = res.data.token;
+                setJwt(token);
+                AsyncStorage.setItem("jwt", token);
+                router.push("/");
+            })
             .catch((err) => console.error(err.toJSON()));
     };
 
