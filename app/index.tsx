@@ -13,15 +13,6 @@ import { useRouter } from "expo-router";
 import moment from "moment";
 import AirportInput from "../components/AirportInput";
 
-type SearchParameter = "origin" | "destination" | "date";
-type Airport = {
-    item: {
-        name: string;
-        municipality: string;
-        iata_code: string;
-    };
-};
-
 const Home = () => {
     const router = useRouter();
     const [origin, setOrigin] = useState("");
