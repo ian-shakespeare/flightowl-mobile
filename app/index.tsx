@@ -88,17 +88,19 @@ const Home = () => {
                         destination !== "" &&
                         moment(date, "MM/DD/YYYY").format("YYYY-MM-DD") !==
                             "" && (
-                            <ButtonPrimary
-                                label="Show me flights"
-                                onPress={() => {
-                                    router.push(
-                                        `search?origin=${origin}&destination=${destination}&date=${moment(
-                                            date,
-                                            "MM/DD/YYYY"
-                                        ).format("YYYY-MM-DD")}`
-                                    );
-                                }}
-                            />
+                            <StyledView className="mt-4">
+                                <ButtonPrimary
+                                    label="Show me flights"
+                                    onPress={() => {
+                                        router.push(
+                                            `search?origin=${origin}&destination=${destination}&date=${moment(
+                                                date,
+                                                "MM/DD/YYYY"
+                                            ).format("YYYY-MM-DD")}`
+                                        );
+                                    }}
+                                />
+                            </StyledView>
                         )}
                 </StyledView>
             )}

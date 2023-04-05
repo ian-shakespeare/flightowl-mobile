@@ -65,6 +65,12 @@ export interface FlightOffer {
     validatingAirlineCodes: string[];
 }
 
+export interface SavedFlightOffer {
+    offer_id: number;
+    date_saved: string;
+    offer: FlightOffer;
+}
+
 export interface Account {
     firstName: string;
     lastName: string;

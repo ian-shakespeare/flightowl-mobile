@@ -3,13 +3,11 @@ import SearchResult from "../components/SearchResult";
 import { FlightOffer } from "../interfaces";
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "expo-router";
-import axios from "axios";
 import { AuthContext } from "./_layout";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SearchPage = () => {
     const { origin, destination, date } = useSearchParams();
-    const { jwt, setJwt } = useContext(AuthContext);
+    const { jwt } = useContext(AuthContext);
     const [results, setResults] = useState<FlightOffer[] | null>(null);
 
     useEffect(() => {
@@ -38,9 +36,11 @@ const SearchPage = () => {
     }, []);
 
     return (
-        <StyledScrollView>
+        <StyledScrollView className="mt-4">
             {results === null ? (
-                <StyledText>Loading...</StyledText>
+                <StyledText className="text-xl text-center pt-4">
+                    Loading...
+                </StyledText>
             ) : (
                 <>
                     {results.slice(0, 5).map((f, i) => (

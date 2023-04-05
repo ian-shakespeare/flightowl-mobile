@@ -12,6 +12,15 @@ const AccountPage = () => {
     const { jwt, setJwt } = useContext(AuthContext);
     const [user, setUser] = useState<Account | null>(null);
 
+    const toDateTime = (t: string): string =>
+        new Date(t).toLocaleString("en-US", {
+            day: "numeric",
+            month: "short",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+        });
+
     useEffect(() => {
         axios
             .request({
@@ -37,19 +46,35 @@ const AccountPage = () => {
     }, []);
 
     return (
-        <StyledView className="h-2/3 flex gap-2 items-center justify-center">
-            <StyledText>
-                Name: {user ? `${user.firstName} ${user.lastName}` : "Unknown"}
+        <StyledView className="h-2/3 w-4/5 flex gap-4 mx-auto content-center justify-center">
+            <StyledText className="text-2xl">
+                Name:{" "}
+                <StyledText className="text-fo-pink">
+                    {user ? `${user.firstName} ${user.lastName}` : "Unknown"}
+                </StyledText>
             </StyledText>
-            <StyledText>Account page. Token: {jwt}</StyledText>
-            <ButtonPrimary
-                label="Logout"
-                onPress={() => {
-                    setJwt(null);
-                    AsyncStorage.setItem("sessionId", "");
-                    router.push("/login");
-                }}
-            />
+            <StyledText className="text-2xl">
+                Email:{" "}
+                <StyledText className="text-fo-magenta">
+                    {user ? `${user.email}` : "Unknown"}
+                </StyledText>
+            </StyledText>
+            <StyledText className="text-2xl">
+                Joined:{" "}
+                <StyledText className="text-fo-purple">
+                    {user ? `${toDateTime(user.dateJoined)}` : "Unknown"}
+                </StyledText>
+            </StyledText>
+            <StyledView className="mt-4">
+                <ButtonPrimary
+                    label="Logout"
+                    onPress={() => {
+                        setJwt(null);
+                        AsyncStorage.setItem("sessionId", "");
+                        router.push("/login");
+                    }}
+                />
+            </StyledView>
         </StyledView>
     );
 };

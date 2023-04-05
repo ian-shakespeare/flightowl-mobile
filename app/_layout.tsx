@@ -61,7 +61,7 @@ const Layout = () => {
                             }
                         />
                     </Link>
-                    <Link href="/">
+                    <Link href="/saved">
                         <FontAwesomeIcon
                             icon={faBookmark}
                             size={32}
