@@ -1,15 +1,11 @@
-# Expo Router Example
+# FlightOwl Mobile
 
-Use [`expo-router`](https://expo.github.io/router) to build native navigation using files in the `app/` directory.
+By Ian Shakespeare
 
-## 🚀 How to use
+![Screenshot of the FlightOwl home screen](screenshot.png)
 
-```sh
-npx create-react-native-app -t with-router
-```
+## Description
 
-## 📝 Notes
+The mobile app implementation of FlightOwl. App is built using React Native with Expo. Data is fetched and client side rendered using AxiosJS. Data is fetched from flightowl-api. Styling is done with Nativewind.
 
-- [Expo Router: Docs](https://expo.github.io/router)
-- [Expo Router: Repo](https://github.com/expo/router)
-- [Request for Comments](https://github.com/expo/router/discussions/1)
+FlightOwl is the all-in-one web and mobile app for finding and saving flights. FlightOwl offers a simple interface for flight searching. Flights can be saved and updated, meaning the user can easily save flights if they aren't ready to purchase.
